@@ -403,6 +403,41 @@
               <FileType>1</FileType>
               <FilePath>..\Services\UART.c</FilePath>
             </File>
+            <File>
+              <FileName>Accelero.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Accelero.c</FilePath>
+            </File>
+            <File>
+              <FileName>Batterie.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Batterie.c</FilePath>
+            </File>
+            <File>
+              <FileName>Girouette.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Girouette.c</FilePath>
+            </File>
+            <File>
+              <FileName>RFEmetteur.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\RFEmetteur.c</FilePath>
+            </File>
+            <File>
+              <FileName>RFRecepteur.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\RFRecepteur.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Table.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Table.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -442,6 +477,11 @@
               <FileName>stm32f1xx_ll_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\LLDrivers\src\stm32f1xx_ll_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_ll_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\LLDrivers\src\stm32f1xx_ll_adc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -877,6 +917,41 @@
               <FileType>1</FileType>
               <FilePath>..\Services\UART.c</FilePath>
             </File>
+            <File>
+              <FileName>Accelero.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Accelero.c</FilePath>
+            </File>
+            <File>
+              <FileName>Batterie.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Batterie.c</FilePath>
+            </File>
+            <File>
+              <FileName>Girouette.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Girouette.c</FilePath>
+            </File>
+            <File>
+              <FileName>RFEmetteur.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\RFEmetteur.c</FilePath>
+            </File>
+            <File>
+              <FileName>RFRecepteur.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\RFRecepteur.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Table.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Services\Table.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -916,6 +991,11 @@
               <FileName>stm32f1xx_ll_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\LLDrivers\src\stm32f1xx_ll_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_ll_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\LLDrivers\src\stm32f1xx_ll_adc.c</FilePath>
             </File>
           </Files>
         </Group>

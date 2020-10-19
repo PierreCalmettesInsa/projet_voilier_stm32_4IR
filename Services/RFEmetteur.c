@@ -5,15 +5,34 @@
 #include "stm32f1xx_LL_tim.h"
 #include "MyTimer.h"
 
-#ifndef _RF_INPUT_ANGLE_RANGE
-#define _RF_INPUT_ANGLE_RANGE	10.0
+#define RF_INPUT_ARR		
+#define RF_INPUT_PSC		/* prescaler décalage arr+1 */
+
+#ifndef RF_INPUT_ANGLE_RANGE
+#define RF_INPUT_ANGLE_RANGE 10.0
 #endif
 
 static TIM_TypeDef *RFInputTimer;
 
+static void rf_input_init(void);
+
+void rf_input_start(TIM_TypeDef *_RFInputTimer)
+{
+	RFInputTimer 		= _RFInputTimer;
+	
+	rf_input_init();
+}
+
 
 /* RF Input works with PB6 or PB7 */
 static void rf_input_init(void) {
+	
+	LL_GPIO_InitTypeDef LLGPIO_struct;
+	
+	/* Timer configuration in PWM input mode */
+	Timer_PWM_input_conf(RFInputTimer,
+											RF_INPUT_ARR,
+											RF_INPUT_PSC);
 	
 
 	/* Input use GPIOB6 */

@@ -5,8 +5,8 @@
 #include "stm32f1xx_LL_tim.h"
 #include "MyTimer.h"
 
-#ifndef _RF_INPUT_ANGLE_RANGE
-#define _RF_INPUT_ANGLE_RANGE	10.0
+#ifndef RF_INPUT_ANGLE_RANGE
+#define RF_INPUT_ANGLE_RANGE 10.0
 #endif
 
 static TIM_TypeDef *RFInputTimer;

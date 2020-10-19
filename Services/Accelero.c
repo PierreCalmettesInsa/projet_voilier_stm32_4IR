@@ -47,7 +47,12 @@ void dma_conf(void){
 		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1); // validation horloge ADC1
 	
 		LL_DMA_InitTypeDef dma1 ;
-	dma1.
+		LL_DMA_DeInit(DMA1_Channel1);
+	
+		dma1.
+	
+		dma1.Mode = LL_DMA_MODE_NORMAL;
+	
 
 	
 	

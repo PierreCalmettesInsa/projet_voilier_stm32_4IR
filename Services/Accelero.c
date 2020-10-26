@@ -3,6 +3,19 @@
 #include "stm32f1xx_ll_gpio.h"
 #include "stm32f1xx_ll_adc.h" 
 #include "stm32f1xx_ll_dma.h" 
+#include "stm32f1xx_ll_tim.h" 
+#include "MyTimer.h"
+
+
+#define ARRAYSIZE 3
+
+volatile uint16_t ADC_values[ARRAYSIZE];
+
+// variable privée qui mémorise pour le module le timer utilisé par le module
+static TIM_TypeDef * Accelero_Timer=TIM2; // init par défaut au cas où l'utilisateur ne lance pas Chrono_Conf avant toute autre fct.
+
+// déclaration callback appelé toute les 10ms
+void Verif_roulis_50ms(void);
 
 
 
@@ -30,6 +43,8 @@ void adc_conf(void){
 		LL_ADC_Enable(ADC1);
 	
 	
+	
+	
 	   /* RCC->CFGR |= RCC_CFGR_ADCPRE_DIV6; // passage de l'horloge ADC1 à 12MHz
     ADC1->CR2|= ADC_CR2_ADON; // démarrage ADC1
     ADC1->SQR1&= ADC_SQR1_L; // reset nb conversion
@@ -47,15 +62,29 @@ void dma_conf(void){
 		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1); // validation horloge ADC1
 	
 		LL_DMA_InitTypeDef dma1 ;
-		LL_DMA_DeInit(DMA1_Channel1);
+		LL_DMA_DeInit(DMA1, LL_DMA_CHANNEL_1);
 	
-		dma1.
+		dma1.Direction = LL_DMA_DIRECTION_PERIPH_TO_MEMORY;
 	
 		dma1.Mode = LL_DMA_MODE_NORMAL;
 	
+		dma1.Priority = LL_DMA_PRIORITY_HIGH;
+		dma1.PeriphOrM2MSrcDataSize = LL_DMA_PDATAALIGN_HALFWORD;
+		dma1.MemoryOrM2MDstDataSize = LL_DMA_MDATAALIGN_HALFWORD;
+	
+		dma1.MemoryOrM2MDstIncMode = LL_DMA_MEMORY_INCREMENT;
+		dma1.PeriphOrM2MSrcIncMode = LL_DMA_PERIPH_NOINCREMENT;
 
+		dma1.NbData = ARRAYSIZE ;
+ 
+		dma1.PeriphOrM2MSrcAddress = LL_ADC_DMA_GetRegAddr(ADC1,LL_ADC_DMA_REG_REGULAR_DATA);
+
+		dma1.MemoryOrM2MDstAddress = (uint32_t)ADC_values ;
 	
-	
+
+		LL_DMA_Init(DMA1,LL_DMA_CHANNEL_1, &dma1);
+		
+		
 }
 
 
@@ -87,21 +116,82 @@ void accelero_pin_conf_io(void) {
 	LL_GPIO_Init(GPIOC,&pin1);
 	
 	adc_conf();
+	dma_conf();
+	
+
 	
 	
 }
 
 
-int convert_accelero(){
+
+
+
+
+
+
+int start_convert(){
+		
+	//enable dma et ADC
+		LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+		LL_ADC_REG_StartConversionSWStart(ADC1);
 	
-    ADC1->CR2 |= ADC_CR2_ADON; // lancement de la conversion
+	//ajout d'un timer
+	// Réglage Timer pour un débordement à 10ms
+	MyTimer_Conf(Accelero_Timer,999, 719);
 	
-    while(!(ADC1->SR & ADC_SR_EOC) ) {} // attente de la fin de conversion
+	// Réglage interruption du Timer avec callback : Chrono_Task_10ms()
+	MyTimer_IT_Conf(Accelero_Timer, Verif_roulis_50ms,3);
+	
+			// Validation IT
+	MyTimer_IT_Enable(Accelero_Timer);
+	
+	
+    //ADC1->CR2 |= ADC_CR2_ADON; // lancement de la conversion
+	
+    //while(!(ADC1->SR & ADC_SR_EOC) ) {} // attente de la fin de conversion
 			
-    ADC1->SR &= ~ADC_SR_EOC; // validation de la conversion
+    //ADC1->SR &= ~ADC_SR_EOC; // validation de la conversion
 			
-    return ADC1->DR & ~((0x0F) << 12); // retour de la conversion
+    //return ADC1->DR & ~((0x0F) << 12); // retour de la conversion
 }
+
+
+
+
+
+
+
+void Verif_roulis_50ms(void)
+{
+	
+	int x = ADC_values[0];
+	int y = ADC_values[1];
+
+	//calcul entre x et y
+	
+	//si roulis trop grand on appelle une fonction de Servo
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

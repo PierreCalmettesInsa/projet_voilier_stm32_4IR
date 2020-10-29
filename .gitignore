@@ -3,3 +3,14 @@
 *.uvguix
 
 *.uvguix.*
+
+*.crf
+
+*.o
+
+*.dep
+
+
+*.htm
+
+*.axf

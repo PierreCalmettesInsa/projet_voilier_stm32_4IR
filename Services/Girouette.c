@@ -3,9 +3,9 @@
 #include "stm32f1xx_ll_gpio.h"
 #include "stm32f1xx_ll_tim.h" 
 
+unsigned char var_a=0, var_b=0, var=0; //variables globales
 
-// variable privée de type int qui mémorise l'angle mesurée
-static int angle=10;	// rem : static rend la visibilité de la variable Chrono_Time limitée à ce fichier 
+
 
 // variable privée qui mémorise pour le module le timer utilisé par défaut sur les pin 6 et 7
 static TIM_TypeDef * Girouette_Timer=TIM1; 
@@ -29,7 +29,7 @@ void Girouette_Conf_io(void){
 	//en mode pull down pour pouvoir voir front montant et descandants
 	LL_GPIO_InitTypeDef pin6;
 	pin6.Pin=LL_GPIO_PIN_6;
-	pin6.Mode=LL_GPIO_MODE_INPUT;
+	pin6.Mode=LL_GPIO_MODE_ALTERNATE;
 	pin6.Speed=LL_GPIO_SPEED_FREQ_LOW;
 	pin6.OutputType=LL_GPIO_OUTPUT_PUSHPULL;
 	pin6.Pull=LL_GPIO_PULL_DOWN;
@@ -37,25 +37,39 @@ void Girouette_Conf_io(void){
 	
 	LL_GPIO_InitTypeDef pin7;
 	pin7.Pin=LL_GPIO_PIN_7;
-	pin7.Mode=LL_GPIO_MODE_INPUT;
+	pin7.Mode=LL_GPIO_MODE_ALTERNATE;
 	pin7.Speed=LL_GPIO_SPEED_FREQ_LOW;
 	pin7.OutputType=LL_GPIO_OUTPUT_PUSHPULL;
 	pin7.Pull=LL_GPIO_PULL_DOWN;
 	LL_GPIO_Init(GPIOA,&pin7);
-}
-//fonction retourne true si retourne signal sinon false
-// LL_GPIO_IsInputPinSet(GPIOA,LL_GPIO_PIN_6);
+	
+	
+	LL_GPIO_AF_EnableRemap_TIM3();
+	
+	LL_TIM_ENCODER_InitTypeDef tim3En ;
+	tim3En.EncoderMode = LL_TIM_ENCODERMODE_X4_TI12;
+	tim3En.IC1Polarity = LL_TIM_IC_POLARITY_RISING;
+	tim3En.IC1ActiveInput = LL_TIM_ACTIVEINPUT_DIRECTTI;
+	tim3En.IC1Prescaler = LL_TIM_ICPSC_DIV1;
+	tim3En.IC1Filter = LL_TIM_IC_FILTER_FDIV1;
+	tim3En.IC2Polarity =LL_TIM_IC_POLARITY_RISING;
+	tim3En.IC2ActiveInput = LL_TIM_ACTIVEINPUT_DIRECTTI;
+	tim3En.IC2Prescaler = LL_TIM_ICPSC_DIV1;
+	tim3En.IC2Filter = LL_TIM_IC_FILTER_FDIV1;
 
-//réglage angle 
-void Girouette_Conf(void){
-		
-	Girouette_Conf_io();
+	LL_TIM_ENCODER_Init(TIM3, &tim3En);
+	
+	
 }
 
+
+
+/* code gérant l'index */
 //handler pour la ligne 5 
 void EXTI9_5_IRQHandler(void){
-	angle=0;
 	EXTI->PR|=EXTI_PR_PR5_Msk;
+	LL_TIM_SetCounter(TIM3, 0);
+	LL_TIM_EnableCounter(TIM3);
 }
 void IT_conf(void){
 	//priorité interruption 
@@ -79,3 +93,26 @@ void IT_conf(void){
 	EXTI->RTSR|=EXTI_RTSR_TR5_Msk;
 	
 }
+
+
+
+//Utilisation d'un timer qui regarde toutes les
+
+
+
+//réglage angle 
+void Girouette_Conf(void){
+		
+	Girouette_Conf_io();
+	IT_conf();
+}
+
+
+
+
+
+
+
+
+
+

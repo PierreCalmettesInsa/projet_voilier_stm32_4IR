@@ -42,7 +42,7 @@ void change_motor(TIM_TypeDef *TIMER, int pulse){
 
 void servo_pwm(void){
 	
-	MyTimer_Conf(TIM4,57599,24);
+	MyTimer_Conf(TIM4,1439,999);
 	TIM4->CCMR2 &= ~TIM_CCMR2_OC3M_0;
 	TIM4->CCMR2 |= TIM_CCMR2_OC3M_1| TIM_CCMR2_OC3M_2;
 	TIM4->CCER |= TIM_CCER_CC3E;

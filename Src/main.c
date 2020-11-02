@@ -22,6 +22,7 @@
 
 #include "Chrono.h"
 #include "UART.h"
+#include "Girouette.h"
 
 
 
@@ -41,22 +42,25 @@ int main(void)
   /* Configure the system clock to 72 MHz */
   SystemClock_Config();
 	
-	Usart_Conf(USART2);
 
   /* Add your application code here */
   // Configuration chronomètre
-	Chrono_Conf(TIM3);
+	//Chrono_Conf(TIM3);
 	
 	
 
 	// Lancement chronomètre
-	Chrono_Start(); 
+	//Chrono_Start(); 
+	
+	
+	Girouette_Conf();
+	
 	
 	
   /* Infinite loop */
   while (1)
   {
-		Chrono_Background();
+		//Chrono_Background();
   }
 }
 

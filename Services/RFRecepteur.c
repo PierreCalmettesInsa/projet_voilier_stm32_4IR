@@ -12,8 +12,8 @@
 #define RF_INPUT_ANGLE_RANGE 10.0
 #endif
 
-#define RF_INPUT_MAX_DUTY_CYCLE
-#define RF_INPU_NEUTRAL_DUTY_CYCLE
+#define RF_INPUT_MAX_DUTY_CYCLE			(((double)RF_INPUT_ARR / 10.0))
+#define RF_INPU_NEUTRAL_DUTY_CYCLE		(((double)RF_INPUT_ARR * 3.0 / 40.0))
 
 static TIM_TypeDef *RFInputTimer;
 

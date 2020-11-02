@@ -12,6 +12,9 @@
 #define RF_INPUT_ANGLE_RANGE 10.0
 #endif
 
+#define RF_INPUT_MAX_DUTY_CYCLE
+#define RF_INPU_NEUTRAL_DUTY_CYCLE
+
 static TIM_TypeDef *RFInputTimer;
 
 static void rf_input_init(void);
@@ -40,4 +43,12 @@ static void rf_input_init(void) {
 	LLGPIO_struct.Mode = LL_GPIO_MODE_FLOATING;
 	LLGPIO_struct.Pull = LL_GPIO_PULL_DOWN;
 
+}
+
+/* Returns an angle in -ange range ; angle range */
+int rf_input_get_angle(void) {
+
+	int val = RFInputTimer->CCR2;
+
+	return (int)((val - RF_INPUT_NEUTRAL_DUTY_CYCLE) * RF_INPUT_ANGLE_RANGE / (RF_INPUT_MAX_DUTY_CYCLE - RF_INPUT_NEUTRAL_DUTY_CYCLE));
 }

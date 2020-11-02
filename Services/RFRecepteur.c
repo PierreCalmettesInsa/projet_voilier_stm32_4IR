@@ -5,8 +5,8 @@
 #include "stm32f1xx_LL_tim.h"
 #include "MyTimer.h"
 
-#define RF_INPUT_ARR		
-#define RF_INPUT_PSC		/* prescaler décalage arr+1 */
+#define RF_INPUT_ARR		4999
+#define RF_INPUT_PSC		(72000000 / ((_RF_INPUT_ARR + 1) * 50) - 1)
 
 #ifndef RF_INPUT_ANGLE_RANGE
 #define RF_INPUT_ANGLE_RANGE 10.0
@@ -34,8 +34,8 @@ static void rf_input_init(void) {
 	
 	/* Timer configuration in PWM input mode */
 	Timer_PWM_input_conf(RFInputTimer,
-											RF_INPUT_ARR,
-											RF_INPUT_PSC);
+					RF_INPUT_ARR,
+					RF_INPUT_PSC);
 	
 
 	/* Input use GPIOB6 */
@@ -48,7 +48,7 @@ static void rf_input_init(void) {
 /* Returns an angle in -ange range ; angle range */
 int rf_input_get_angle(void) {
 
-	int val = RFInputTimer->CCR2;
+	int val = RFInputTimer->CCR1;
 
 	return (int)((val - RF_INPUT_NEUTRAL_DUTY_CYCLE) * RF_INPUT_ANGLE_RANGE / (RF_INPUT_MAX_DUTY_CYCLE - RF_INPUT_NEUTRAL_DUTY_CYCLE));
 }

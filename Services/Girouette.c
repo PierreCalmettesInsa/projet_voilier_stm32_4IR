@@ -5,7 +5,7 @@
 
 
 // variable privée de type int qui mémorise l'angle mesurée
-static int angle;	// rem : static rend la visibilité de la variable Chrono_Time limitée à ce fichier 
+static int angle=10;	// rem : static rend la visibilité de la variable Chrono_Time limitée à ce fichier 
 
 // variable privée qui mémorise pour le module le timer utilisé par défaut sur les pin 6 et 7
 static TIM_TypeDef * Girouette_Timer=TIM1; 
@@ -53,24 +53,29 @@ void Girouette_Conf(void){
 }
 
 //handler pour la ligne 5 
-void EXTI5_IRQHandler(void){
+void EXTI9_5_IRQHandler(void){
 	angle=0;
+	EXTI->PR|=EXTI_PR_PR5_Msk;
 }
-
 void IT_conf(void){
 	//priorité interruption 
 	int prio=10;
 	//on laisse faire les interruption à partir de pa5
 	EXTI->IMR|=EXTI_IMR_MR5_Msk;
 	
-	//on selectionne la source pour l'interruption ici gpioa 
-	AFIO->EXTICR[1]|=AFIO_EXTICR2_EXTI5_PA;
 	//on enable la clock de l'afio
 	RCC->APB2ENR|=RCC_APB2ENR_AFIOEN_Msk;
-	//on règle la prio 
+	//on selectionne la source pour l'interruption ici celui correspondant gpioa 
+	AFIO->EXTICR[1]&=~AFIO_EXTICR2_EXTI5;
+	AFIO->EXTICR[1]|=AFIO_EXTICR2_EXTI5_PA;
+	
+	//on règle la prio et enable l'interruption
 	//23 -> EXTI5 à 9
 	NVIC->IP[23]=prio;
 	//activation interruption
 	NVIC->ISER[0]|= (1<<23);
+	
+	//l'interruption se detecte lorsqu'on a un front montant
+	EXTI->RTSR|=EXTI_RTSR_TR5_Msk;
 	
 }

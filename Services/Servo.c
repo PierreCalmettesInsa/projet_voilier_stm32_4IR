@@ -10,7 +10,7 @@
 void servo_pin_conf_io(void) {
 	
 	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOA);
-
+	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOB);
 	
 	
 	LL_GPIO_InitTypeDef pin8A ;
@@ -35,7 +35,7 @@ void servo_pin_conf_io(void) {
 }
 
 void change_motor(TIM_TypeDef *TIMER, int pulse){
-    TIMER->CCR1 = TIMER->ARR*pulse/100;
+    TIMER->CCR3 = TIMER->ARR*pulse/100;
 }
 
 //PWM sur ch3 de tim4
@@ -43,11 +43,12 @@ void change_motor(TIM_TypeDef *TIMER, int pulse){
 void servo_pwm(void){
 	
 	MyTimer_Conf(TIM4,1439,999);
+
 	TIM4->CCMR2 &= ~TIM_CCMR2_OC3M_0;
 	TIM4->CCMR2 |= TIM_CCMR2_OC3M_1| TIM_CCMR2_OC3M_2;
+	TIM4->CCMR2 |= TIM_CCMR2_OC3PE ;
 	TIM4->CCER |= TIM_CCER_CC3E;
 	change_motor(TIM4,10); // Réglage de l’impulsion
-
 	MyTimer_Start(TIM4);
 
 }

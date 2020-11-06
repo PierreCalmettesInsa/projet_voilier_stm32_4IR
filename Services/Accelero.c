@@ -24,6 +24,10 @@ void Verif_roulis_50ms(void);
 
 void adc_conf(void){
 		LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_ADC1); // validation horloge ADC1
+		
+		LL_ADC_InitTypeDef adc1_struct;
+		adc1_struct.DataAlignment = LL_ADC_DATA_ALIGN_RIGHT;
+		adc1_struct.SequencersScanMode = LL_ADC_SEQ_SCAN_ENABLE;
 	
 		LL_ADC_REG_InitTypeDef adc1 ;
 		adc1.TriggerSource = LL_ADC_REG_TRIG_SOFTWARE;
@@ -31,6 +35,8 @@ void adc_conf(void){
 		adc1.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
 		adc1.ContinuousMode = LL_ADC_REG_CONV_CONTINUOUS ;
 		adc1.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
+	
+		LL_ADC_Init(ADC1,&adc1_struct);
 		LL_ADC_REG_Init(ADC1,&adc1);
 	
 		LL_ADC_REG_SetSequencerRanks(ADC1,LL_ADC_REG_RANK_1,LL_ADC_CHANNEL_10);

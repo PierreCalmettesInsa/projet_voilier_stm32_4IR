@@ -22,6 +22,7 @@
 
 #include "UART.h"
 #include "Girouette.h"
+#include "Servo.h"
 
 
 
@@ -52,7 +53,10 @@ int main(void)
 	//Chrono_Start(); 
 	
 	
-	Girouette_Conf();
+	//Girouette_Conf();
+	
+	servo_pin_conf_io();
+	servo_pwm();
 	
 	
 	

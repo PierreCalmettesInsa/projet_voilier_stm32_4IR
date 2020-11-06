@@ -20,7 +20,6 @@
 #include "stm32f1xx_ll_utils.h"   // utile dans la fonction SystemClock_Config
 #include "stm32f1xx_ll_system.h" // utile dans la fonction SystemClock_Config
 
-#include "Chrono.h"
 #include "UART.h"
 #include "Girouette.h"
 

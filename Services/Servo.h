@@ -3,5 +3,4 @@
 
 void servo_pin_conf_io(void);
 
-void servo_pwm(void);
-
+void servo_init_pwm(void);

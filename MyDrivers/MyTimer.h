@@ -67,4 +67,19 @@ void MyTimer_IT_Enable(TIM_TypeDef * Timer);
   */
 void MyTimer_IT_Disable(TIM_TypeDef * Timer);
 
+/**
+	* @brief  change motor pulsation(duty cycle)
+  * @note   
+	* @param  
+  * @retval None
+  */
+void change_motor(TIM_TypeDef *TIMER, int pulse,int channel);
+
+/**
+	* @brief  change motor pulsation(duty cycle)
+  * @note   
+	* @param  
+  * @retval
+	*/
+void create_pwm(TIM_TypeDef *TIMER,int channel,int arr,int psc,int pulse);
 #endif

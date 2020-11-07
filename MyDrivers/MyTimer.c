@@ -148,6 +148,40 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer)
 }	
 
 
+void change_motor(TIM_TypeDef *TIMER, int pulse,int channel){
+	if(channel==2){
+		    TIMER->CCR2 = TIMER->ARR*pulse/100;
+
+	}
+	else{
+		    TIMER->CCR3 = TIMER->ARR*pulse/100;
+	}
+}
+
+//PWM sur ch3 de tim41439,999
+
+void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
+
+	MyTimer_Conf(TIMER,arr,psc);
+
+	if(channel==2){
+			TIMER->CCMR1 &= ~TIM_CCMR1_OC2M_0;
+			TIMER->CCMR1 |= TIM_CCMR1_OC2M_1| TIM_CCMR1_OC2M_2;
+			TIMER->CCMR1 |= TIM_CCMR1_OC2PE ;
+			TIMER->CCER |= TIM_CCER_CC2E;
+	}
+	else{
+			TIMER->CCMR2 &= ~TIM_CCMR2_OC3M_0;
+			TIMER->CCMR2 |= TIM_CCMR2_OC3M_1| TIM_CCMR2_OC3M_2;
+			TIMER->CCMR2 |= TIM_CCMR2_OC3PE ;
+			TIMER->CCER |= TIM_CCER_CC3E;
+	}
+
+	change_motor(TIMER,pulse,channel); // Réglage de l’impulsion
+	MyTimer_Start(TIMER);
+
+}
+
 /*
 ============ LES INTERRUPTIONS =================================
 

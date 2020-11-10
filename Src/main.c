@@ -23,6 +23,7 @@
 #include "UART.h"
 #include "Girouette.h"
 #include "Servo.h"
+#include "Accelero.h"
 
 
 
@@ -55,8 +56,10 @@ int main(void)
 	
 	//Girouette_Conf();
 	
-	servo_pin_conf_io();
-	servo_pwm();
+	//servo_pin_conf_io();
+	//servo_pwm();
+	
+	start_convert();
 	
 	
 	

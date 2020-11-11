@@ -57,8 +57,8 @@ int main(void)
 	
 	//Girouette_Conf();
 	
-	//servo_pin_conf_io();
-	//servo_pwm();
+	servo_pin_conf_io();
+	servo_init_pwm();
 	
 	start_convert();
 	interrupt_start();

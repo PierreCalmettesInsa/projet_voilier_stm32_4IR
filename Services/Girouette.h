@@ -8,5 +8,7 @@ void IT_conf(void);
 
 void Girouette_Conf(void);
 
+int gir_get_inc(void);
+
 
 

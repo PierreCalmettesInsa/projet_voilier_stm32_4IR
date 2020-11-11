@@ -105,6 +105,28 @@ void Girouette_Conf(void){
 
 
 
+int gir_get_inc(void)
+{	
+	return LL_TIM_GetCounter(TIM3);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

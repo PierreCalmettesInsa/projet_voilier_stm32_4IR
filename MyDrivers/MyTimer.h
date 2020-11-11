@@ -73,7 +73,7 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer);
 	* @param  
   * @retval None
   */
-void change_motor(TIM_TypeDef *TIMER, int pulse,int channel);
+void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel);
 
 /**
 	* @brief  change motor pulsation(duty cycle)

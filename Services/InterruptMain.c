@@ -6,6 +6,8 @@
 #include "stm32f1xx_ll_tim.h" 
 #include "MyTimer.h"
 #include "Accelero.h"
+#include "Girouette.h"
+#include "Servo.h"
 
 
 
@@ -38,6 +40,12 @@ void Verif_sail_50ms(void){
 	
 	
 	//On vérifie d'abord la girouette
+	int angle = gir_get_inc();
+	
+	//On change le servo-moteur
+	if (angle != 0){
+	change_motor(angle);
+	}
 	
 	
 	//Puis on vérifie le roulis
@@ -45,6 +53,9 @@ void Verif_sail_50ms(void){
 	float x = result[0];
 	float y = result[1] ;
 	
+	if (x > 1.0 && y > 1.00){
+		choquer_voile();
+	}
 	
 	
 	

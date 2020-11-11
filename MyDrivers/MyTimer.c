@@ -148,7 +148,7 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer)
 }	
 
 
-void change_motor(TIM_TypeDef *TIMER, int pulse,int channel){
+void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel){
 	if(channel==2){
 		    TIMER->CCR2 = TIMER->ARR*pulse/100;
 
@@ -158,7 +158,7 @@ void change_motor(TIM_TypeDef *TIMER, int pulse,int channel){
 	}
 }
 
-//PWM sur ch3 de tim41439,999
+//PWM sur ch3 de tim4 1439,999
 
 void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
 
@@ -177,7 +177,7 @@ void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
 			TIMER->CCER |= TIM_CCER_CC3E;
 	}
 
-	change_motor(TIMER,pulse,channel); // Réglage de l’impulsion
+	pwm_set_duty_cycle(TIMER,pulse,channel); // Réglage de l’impulsion
 	MyTimer_Start(TIMER);
 
 }

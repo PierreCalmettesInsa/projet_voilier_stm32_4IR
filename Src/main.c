@@ -24,6 +24,7 @@
 #include "Girouette.h"
 #include "Servo.h"
 #include "Accelero.h"
+#include "InterruptMain.h"
 
 
 
@@ -60,6 +61,7 @@ int main(void)
 	//servo_pwm();
 	
 	start_convert();
+	interrupt_start();
 	
 	
 	

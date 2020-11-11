@@ -23,7 +23,7 @@ void interrupt_start(void){
 	MyTimer_Conf(Interrupt_Timer,999, 719);
 	
 	// Réglage interruption du Timer avec callback : Chrono_Task_10ms()
-	MyTimer_IT_Conf(Interrupt_Timer, Verif_roulis_50ms,3);
+	MyTimer_IT_Conf(Interrupt_Timer, Verif_sail_50ms,3);
 	
 			// Validation IT
 	MyTimer_IT_Enable(Interrupt_Timer);
@@ -41,7 +41,10 @@ void Verif_sail_50ms(void){
 	
 	
 	//Puis on vérifie le roulis
-	Verif_roulis_50ms();
+	float * result = Verif_roulis_50ms();
+	float x = result[0];
+	float y = result[1] ;
+	
 	
 	
 	

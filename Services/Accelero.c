@@ -8,8 +8,12 @@
 
 
 #define ARRAYSIZE 3
+#define ADC_CONVERTION 3.3/ 4096.0
+#define SENSITIVITY 0.480
+#define ZERO_G 1.65
 
 volatile uint16_t ADC_values[ARRAYSIZE];
+
 
 
 
@@ -154,6 +158,7 @@ void start_convert(void){
 
 
 
+
 void start_convert_no_dma(void){
 		accelero_pin_conf_io();
 	
@@ -161,11 +166,38 @@ void start_convert_no_dma(void){
 }
 
 
-void Verif_roulis_50ms(void)
-{
+
+float volt_to_g(uint16_t v){
+	float value = v ;
 	
-	int x = ADC_values[0];
-	int y = ADC_values[1];
+	value = value * ADC_CONVERTION ;
+	value = value - ZERO_G ;
+	
+	value = value / SENSITIVITY ;
+	
+	return value ;
+	
+	
+}
+
+
+
+
+
+
+
+
+float * Verif_roulis_50ms(void)
+{
+	static float result[2] ;
+
+	float x = volt_to_g(ADC_values[0]);
+	float y = volt_to_g(ADC_values[1]);
+	
+	result[0] = x ;
+	result[1] = y;
+	
+	return result;
 	
 }
 
@@ -178,9 +210,9 @@ void Verif_roulis_50ms_no_dma(void){
 			
     ADC1->SR &= ~ADC_SR_EOC; // validation de la conversion
 			
-    int x =  ADC1->DR & ~((0x0F) << 12); // retour de la conversion
+    float x =  volt_to_g(ADC1->DR & ~((0x0F) << 12)); // retour de la conversion
 			
-		int y = 0 ;
+		float y = 0.0 ;
 }
 
 

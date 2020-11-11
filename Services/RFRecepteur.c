@@ -13,7 +13,8 @@
 #endif
 
 #define RF_INPUT_MAX_DUTY_CYCLE			(((double)RF_INPUT_ARR / 10.0))
-#define RF_INPU_NEUTRAL_DUTY_CYCLE		(((double)RF_INPUT_ARR * 3.0 / 40.0))
+	
+#define RF_INPUT_NEUTRAL_DUTY_CYCLE		(((double)RF_INPUT_ARR * 3.0 / 40.0))
 
 static TIM_TypeDef *RFInputTimer;
 //static int RFInputChannel;
@@ -79,17 +80,41 @@ static void rf_input_init(void) {
 	
 	}
 
+
 /* Returns an angle in -ange range ; angle range */
-/*
-int rf_input_get_angle(void) {
 
-	int val;
+int rf_input_get_angle (void) {
 
+	int duty;
+	uint32_t period ;
+	float frequency ;
+
+	/*
 	if (RFInputChannel == 1)
 		val = RFInputTimer->CCR2;
 	else if (RFInputChannel == 2)
 		val = RFInputTimer->CCR1;
+	*/
+	
+	//On a choisi le channel 1
+	duty = RFInputTimer->CCR2;
+	period = RFInputTimer->CCR1;
+	frequency = TIM4 ->PSC * period / 72000000 ;
+	//float duty_cycle = duty / (72000000 * frequency) ;
+	//float period_ms = duty_cycle / frequency * 1000 ;
+	//angle entre -1 et 1
+	//float angle = period_ms -1
 
-	return (int)((val - RF_INPUT_NEUTRAL_DUTY_CYCLE) * RF_INPUT_ANGLE_RANGE / (RF_INPUT_MAX_DUTY_CYCLE - RF_INPUT_NEUTRAL_DUTY_CYCLE));
+
+	return (int)((duty - RF_INPUT_NEUTRAL_DUTY_CYCLE) * RF_INPUT_ANGLE_RANGE / (RF_INPUT_MAX_DUTY_CYCLE - RF_INPUT_NEUTRAL_DUTY_CYCLE));
 }
-*/
+
+	
+	
+	
+	
+	
+	
+	
+	
+	

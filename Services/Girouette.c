@@ -94,13 +94,7 @@ void IT_conf(void){
 	
 }
 
-
-
-//Utilisation d'un timer qui regarde toutes les
-
-
-
-//réglage angle 
+ 
 void Girouette_Conf(void){
 		
 	Girouette_Conf_io();

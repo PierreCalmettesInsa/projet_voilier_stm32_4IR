@@ -158,7 +158,6 @@ void start_convert(void){
 
 
 
-
 void start_convert_no_dma(void){
 		accelero_pin_conf_io();
 	
@@ -179,11 +178,6 @@ float volt_to_g(uint16_t v){
 	
 	
 }
-
-
-
-
-
 
 
 

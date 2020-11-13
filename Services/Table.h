@@ -9,3 +9,4 @@ void init_motor(void);
 
 void changer_sens_motor(int sens);
 
+int choose_motor_pulse(float motor_conf_pwm);

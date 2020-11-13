@@ -13,7 +13,6 @@
 
 
 
-
 static TIM_TypeDef * Interrupt_Timer=TIM1; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
 
 // déclaration callback appelé toute les 10ms
@@ -62,15 +61,18 @@ void Verif_sail_50ms(void){
 	
 	
 	//On regarde la pwm de la télécommande
-	int motor_conf_pwm =  rf_input_get_angle();
+	float motor_conf_pwm =  rf_input_get_angle(); // On récupère l'angle
 	
-	if (motor_conf_pwm <0){
+	if (motor_conf_pwm <0){ // Détection du sens
 		changer_sens_motor(-1);
-		
+		motor_conf_pwm = - motor_conf_pwm; // On prend la valeur absolue si négatif		
 	} else if (motor_conf_pwm > 0){
 				changer_sens_motor(1);
 	}
 	
+	int pulse = choose_motor_pulse(motor_conf_pwm); // 
+
+	create_pwm_motor(TIM2,2,199,17,pulse);
 	
 	
 }

@@ -8,11 +8,13 @@
 #include "Accelero.h"
 #include "Girouette.h"
 #include "Servo.h"
+#include "RFRecepteur.h"
+#include "Table.h"
 
 
 
 
-static TIM_TypeDef * Interrupt_Timer=TIM2; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
+static TIM_TypeDef * Interrupt_Timer=TIM1; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
 
 // déclaration callback appelé toute les 10ms
 void Verif_sail_50ms(void);
@@ -55,6 +57,18 @@ void Verif_sail_50ms(void){
 	
 	if (x > 1.0 && y > 1.00){
 		choquer_voile();
+	}
+	
+	
+	
+	//On regarde la pwm de la télécommande
+	int motor_conf_pwm =  rf_input_get_angle();
+	
+	if (motor_conf_pwm <0){
+		changer_sens_motor(-1);
+		
+	} else if (motor_conf_pwm > 0){
+				changer_sens_motor(1);
 	}
 	
 	

@@ -196,6 +196,18 @@ float * Verif_roulis_50ms(void)
 }
 
 
+
+float get_batterie_volt(void)
+{
+	float bat_v = (ADC_values[2]) * ADC_CONVERTION;
+	
+	return bat_v ;
+}
+
+
+
+
+
 void Verif_roulis_50ms_no_dma(void){
 	
 		ADC1->CR2 |= ADC_CR2_ADON; // lancement de la conversion

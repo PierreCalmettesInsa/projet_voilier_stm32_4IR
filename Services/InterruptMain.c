@@ -10,6 +10,7 @@
 #include "Servo.h"
 #include "RFRecepteur.h"
 #include "Table.h"
+#include "RFEmetteur.h"
 
 
 
@@ -39,7 +40,7 @@ void interrupt_start(void){
 
 void Verif_sail_50ms(void){
 	
-	
+	int roulis = 0 ;
 	//On vérifie d'abord la girouette
 	int angle = gir_get_inc();
 	
@@ -56,6 +57,7 @@ void Verif_sail_50ms(void){
 	
 	if (x > 1.0 && y > 1.00){
 		choquer_voile();
+		roulis = 1;
 	}
 	
 	
@@ -73,6 +75,10 @@ void Verif_sail_50ms(void){
 	int pulse = choose_motor_pulse(motor_conf_pwm); // 
 
 	create_pwm_motor(TIM2,2,199,17,pulse);
+	
+	
+	
+	send_all(roulis);
 	
 	
 }

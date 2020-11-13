@@ -199,7 +199,7 @@ float * Verif_roulis_50ms(void)
 
 float get_batterie_volt(void)
 {
-	float bat_v = (ADC_values[2]) * ADC_CONVERTION;
+	float bat_v = (ADC_values[2]);
 	
 	return bat_v ;
 }

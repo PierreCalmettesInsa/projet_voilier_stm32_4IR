@@ -18,9 +18,8 @@
 
 static TIM_TypeDef *RFInputTimer;
 
-static void rf_input_init(void);
 
-void rf_input_start(TIM_TypeDef *_RFInputTimer, int channel)
+void rf_input_start(TIM_TypeDef *_RFInputTimer)
 {
 	RFInputTimer 		= _RFInputTimer;	
 	rf_input_init();
@@ -28,7 +27,7 @@ void rf_input_start(TIM_TypeDef *_RFInputTimer, int channel)
 
 
 /* RF Input works with PB6 or PB7 */
-static void rf_input_init(void) {
+void rf_input_init(void) {
 	
 	/* Servo Engine PIN8 */
 	LL_GPIO_InitTypeDef LLGPIO_struct;

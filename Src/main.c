@@ -25,6 +25,9 @@
 #include "Servo.h"
 #include "Accelero.h"
 #include "InterruptMain.h"
+#include "Table.h"
+#include "RFEmetteur.h"
+#include "RFRecepteur.h"
 
 
 
@@ -61,6 +64,17 @@ int main(void)
 	servo_init_pwm();
 	
 	start_convert();
+	
+	
+	rf_input_start(TIM4);
+	
+	init_motor();
+	
+	
+	emetteur_conf();
+	
+	
+	
 	interrupt_start();
 	
 	

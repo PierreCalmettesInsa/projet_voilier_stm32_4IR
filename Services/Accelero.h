@@ -20,3 +20,4 @@ float * Verif_roulis_50ms(void);
 
 void Verif_roulis_50ms_no_dma(void);
 
+float get_batterie_volt(void);

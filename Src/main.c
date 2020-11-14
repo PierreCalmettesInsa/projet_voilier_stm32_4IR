@@ -28,6 +28,7 @@
 #include "Table.h"
 #include "RFEmetteur.h"
 #include "RFRecepteur.h"
+#include "gpio.h"
 
 
 
@@ -47,15 +48,7 @@ int main(void)
   /* Configure the system clock to 72 MHz */
   SystemClock_Config();
 	
-
-  /* Add your application code here */
-  // Configuration chronomètre
-	//Chrono_Conf(TIM3);
-	
-	
-
-	// Lancement chronomètre
-	//Chrono_Start(); 
+	gpio_clock_init();
 	
 	
 	//Girouette_Conf();
@@ -78,11 +71,9 @@ int main(void)
 	interrupt_start();
 	
 	
-	
   /* Infinite loop */
   while (1)
   {
-		//Chrono_Background();
   }
 }
 

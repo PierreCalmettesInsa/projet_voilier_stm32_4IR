@@ -4,6 +4,7 @@
 #include "stm32f1xx_ll_usart.h" 
 #include "stm32f1xx_LL_tim.h"
 #include "MyTimer.h"
+#include "gpio.h"
 
 #define RF_INPUT_ARR		1439
 #define RF_INPUT_PSC		(72000000 / ((RF_INPUT_ARR + 1) * 50) - 1)
@@ -33,14 +34,12 @@ void rf_input_init(void) {
 	LL_GPIO_InitTypeDef LLGPIO_struct;
 	
 	LLGPIO_struct.Pin = LL_GPIO_PIN_6;
-	LLGPIO_struct.Mode = LL_GPIO_MODE_FLOATING;
-	LLGPIO_struct.Pull = LL_GPIO_PULL_DOWN;
-	LLGPIO_struct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-	LLGPIO_struct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	
-	LL_GPIO_Init(GPIOB,&LLGPIO_struct);
+	gpio_conf_floating(LLGPIO_struct,GPIOB);
+
 	
 	//config pwm input
+	//Le TIM4 est également utilisé par le servo moteur, mais avec la pwm sur un autre channel, pwm de 20 ms avec une résolution de 1/72000, soit 72 pas pour 1 ms
+	//Donc 36 pas max pour la vitesse ce qui est largement suffisant
 	TIM4->CCMR1 |= TIM_CCMR1_CC1S_0; // put CC1S(0) to 1
 	TIM4->CCMR1 &= ~(TIM_CCMR1_CC1S_1); // put CC1S(1) to 0
 	
@@ -71,12 +70,7 @@ int rf_input_get_angle (void) {
 	uint32_t period ;
 	float frequency ;
 
-	/*
-	if (RFInputChannel == 1)
-		val = RFInputTimer->CCR2;
-	else if (RFInputChannel == 2)
-		val = RFInputTimer->CCR1;
-	*/
+
 	
 	//On a choisi le channel 1
 	duty = RFInputTimer->CCR2;
@@ -86,26 +80,18 @@ int rf_input_get_angle (void) {
 	float period_ms = duty_cycle / frequency * 1000 ;
 	//angle entre -1 et 1
 	float angle = period_ms*2 -3;
+	
+	//Au cas ou la pwm input ne fonctionne pas
+	if (angle == -3){
+		angle = 0 ;
+	}
+	
 
 	return angle ;
 	//return (int)((duty - RF_INPUT_NEUTRAL_DUTY_CYCLE) * RF_INPUT_ANGLE_RANGE / (RF_INPUT_MAX_DUTY_CYCLE - RF_INPUT_NEUTRAL_DUTY_CYCLE));
 }
 
-	
-	
 
 
 
-
-
-
-
-
-
-
-	
-	
-	
-	
-	
-	
+//end_of_file

@@ -4,18 +4,16 @@
 #include "stm32f1xx_ll_gpio.h"
 #include "stm32f1xx_ll_usart.h"
 #include "Accelero.h"
+#include "gpio.h"
 
 void emetteur_conf(void){
 	
 	Usart_Conf(USART1);
 	
-		LL_GPIO_InitTypeDef pin11 ;
-		pin11.Pin = LL_GPIO_PIN_11 ;
-		pin11.Mode = LL_GPIO_MODE_ALTERNATE;
-		pin11.Speed = LL_GPIO_SPEED_FREQ_LOW;
-		pin11.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-		pin11.Pull = LL_GPIO_PULL_DOWN;
-		LL_GPIO_Init(GPIOA,&pin11);
+	LL_GPIO_InitTypeDef pin11 ;
+	pin11.Pin = LL_GPIO_PIN_11 ;
+	gpio_conf_alternate(pin11,GPIOA);
+
 	
 	
 }
@@ -32,9 +30,8 @@ void send_all(int roulis){
 	float batterie = get_batterie_volt();
 	
 	
-	
-	if (batterie < 4.0){
-		char str[20];
+	//Batterie entre 0 et 3.3V (pont diviseur de tension), on envoie si batterie inférieure à 50%
+	if (batterie < 1.6){
 		send(((int)batterie%10)+48,USART1);
 		send(44,USART1);
 		send(((int)(batterie*10)%10)+48,USART1);
@@ -56,3 +53,10 @@ void send_all(int roulis){
 	
 	
 }
+
+
+
+
+
+
+

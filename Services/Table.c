@@ -3,6 +3,7 @@
 #include "stm32f1xx_ll_gpio.h"
 #include "stm32f1xx_ll_tim.h" 
 #include "MyTimer.h"
+#include "gpio.h"
 
 
 #define NEUTRAL_ZONE_PWM_MCC 0.1
@@ -10,48 +11,24 @@
 
 void gpio_table_conf(void){
 	
-	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOA);
-	
-	
 	LL_GPIO_InitTypeDef pin1 ;
 	pin1.Pin = LL_GPIO_PIN_1 ;
-	pin1.Mode = LL_GPIO_MODE_ALTERNATE;
-	pin1.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	pin1.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-	pin1.Pull = LL_GPIO_PULL_DOWN;
-	LL_GPIO_Init(GPIOA,&pin1);
-	
+	gpio_conf_alternate(pin1,GPIOA);
 	
 	LL_GPIO_InitTypeDef pin2 ;
 	pin2.Pin = LL_GPIO_PIN_2 ;
-	pin2.Mode = LL_GPIO_MODE_OUTPUT;
-	pin2.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	pin2.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-	pin2.Pull = LL_GPIO_PULL_DOWN;
-	LL_GPIO_Init(GPIOA,&pin2);
-	
-	
-	
-	
+	gpio_conf_output(pin2,GPIOA);
 	
 }
 
 
 
-
-
-
-void create_pwm_motor(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
-	
-	create_pwm(TIMER,channel,arr,psc,pulse);
-	
-}
-
+//On veut au moins 10 valeurs différentes pour la pwm, on prend un pas de 30, pas trop élevé mais suffisament pour que PSC rentre dans 16 bits
 void init_motor(void){
 	
 	gpio_table_conf();
 	
-	create_pwm_motor(TIM2,2,199,17,0);
+	create_pwm(TIM2,2,29,47999,0);
 	
 	
 }

@@ -74,7 +74,7 @@ void Verif_sail_50ms(void){
 	
 	int pulse = choose_motor_pulse(motor_conf_pwm); // 
 
-	create_pwm_motor(TIM2,2,199,17,pulse);
+	pwm_set_duty_cycle(TIM2,2,pulse);
 	
 	
 	

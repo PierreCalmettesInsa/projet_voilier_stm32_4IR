@@ -5,6 +5,7 @@
 #include "stm32f1xx_ll_dma.h" 
 #include "stm32f1xx_ll_tim.h" 
 #include "MyTimer.h"
+#include "gpio.h"
 
 
 #define ARRAYSIZE 3
@@ -112,32 +113,19 @@ void dma_conf(void){
 
 void accelero_pin_conf_io(void) {
 	
-	LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOC);
 
 	LL_GPIO_InitTypeDef pin0 ;
 	pin0.Pin = LL_GPIO_PIN_0 ;
-	pin0.Mode = LL_GPIO_MODE_ANALOG;
-	pin0.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	pin0.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-	pin0.Pull = LL_GPIO_PULL_DOWN;
-	LL_GPIO_Init(GPIOC,&pin0);
-	
+	gpio_conf_analog(pin0,GPIOC);
+
 	LL_GPIO_InitTypeDef pin1 ;
 	pin1.Pin = LL_GPIO_PIN_1 ;
-	pin1.Mode = LL_GPIO_MODE_ANALOG;
-	pin1.OutputType = LL_GPIO_OUTPUT_PUSHPULL ;
-	pin1.Pull = LL_GPIO_PULL_DOWN;
-	pin1.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	LL_GPIO_Init(GPIOC,&pin1);
-	
+	gpio_conf_analog(pin1,GPIOC);
+
 	LL_GPIO_InitTypeDef pin2 ;
 	pin2.Pin = LL_GPIO_PIN_2 ;
-	pin2.Mode = LL_GPIO_MODE_ANALOG;
-	pin2.OutputType = LL_GPIO_OUTPUT_PUSHPULL ;
-	pin2.Pull = LL_GPIO_PULL_DOWN;
-	pin2.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	LL_GPIO_Init(GPIOC,&pin2);
-	
+	gpio_conf_analog(pin2,GPIOC);
+
 }
 
 
@@ -197,9 +185,10 @@ float * Verif_roulis_50ms(void)
 
 
 
+//La batterie est entre 0 et 12v, mais un pont diviseur de tension ramène la tension entre 0 et 3.3V, limite de l'ADC
 float get_batterie_volt(void)
 {
-	float bat_v = (ADC_values[2]);
+	float bat_v = (ADC_values[2])* ADC_CONVERTION;
 	
 	return bat_v ;
 }
@@ -210,6 +199,7 @@ float get_batterie_volt(void)
 
 void Verif_roulis_50ms_no_dma(void){
 	
+	
 		ADC1->CR2 |= ADC_CR2_ADON; // lancement de la conversion
 	
     while(!(ADC1->SR & ADC_SR_EOC) ) {} // attente de la fin de conversion
@@ -218,7 +208,23 @@ void Verif_roulis_50ms_no_dma(void){
 			
     float x =  volt_to_g(ADC1->DR & ~((0x0F) << 12)); // retour de la conversion
 			
-		float y = 0.0 ;
+		LL_ADC_Disable(ADC1);
+			
+		LL_ADC_REG_SetSequencerRanks(ADC1,LL_ADC_REG_RANK_1,LL_ADC_CHANNEL_11);
+	
+		LL_ADC_Enable(ADC1);
+	
+		LL_ADC_StartCalibration(ADC1);
+		while(LL_ADC_IsCalibrationOnGoing(ADC1));
+			
+		ADC1->CR2 |= ADC_CR2_ADON; // lancement de la conversion
+	
+    while(!(ADC1->SR & ADC_SR_EOC) ) {} // attente de la fin de conversion
+			
+    ADC1->SR &= ~ADC_SR_EOC; // validation de la conversion
+			
+    float y =  volt_to_g(ADC1->DR & ~((0x0F) << 12)); // retour de la conversion
+			
 }
 
 

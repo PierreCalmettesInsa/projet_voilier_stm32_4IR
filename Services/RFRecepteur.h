@@ -10,3 +10,7 @@ void rf_input_init(void);
 
 /* Returns an angle in [ - RF_INPUT_ANGLE_RANGE ; RF_INPUT_ANGLE_RANGE] */
 int rf_input_get_angle(void);
+
+
+
+

@@ -148,6 +148,14 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer)
 }	
 
 
+
+/*
+============ PWM =================================
+
+*/
+
+
+
 void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel){
 	if(channel==2){
 		    TIMER->CCR2 = TIMER->ARR*pulse/100;
@@ -181,6 +189,11 @@ void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
 	MyTimer_Start(TIMER);
 
 }
+
+
+
+
+
 
 /*
 ============ LES INTERRUPTIONS =================================

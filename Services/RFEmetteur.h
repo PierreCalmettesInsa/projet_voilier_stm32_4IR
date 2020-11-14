@@ -4,3 +4,9 @@
 void emetteur_conf(void);
 
 void send_all(int roulis);
+
+
+
+
+
+

@@ -49,6 +49,7 @@ int main(void)
   SystemClock_Config();
 	
 	gpio_clock_init();
+	init_systick();
 	
 	
 	//Girouette_Conf();
@@ -68,12 +69,18 @@ int main(void)
 	
 	
 	
-	interrupt_start();
+	//interrupt_start();
 	
 	
   /* Infinite loop */
   while (1)
   {
+				
+		if (get_uart() == 1){
+			send_uart();
+			reset_uart();
+		}
+		
   }
 }
 

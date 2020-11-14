@@ -4,6 +4,9 @@
 #include "stm32f1xx_ll_adc.h" 
 #include "stm32f1xx_ll_dma.h" 
 #include "stm32f1xx_ll_tim.h" 
+#include "stm32f1xx_ll_utils.h"
+#include "stm32f1xx_ll_rcc.h"
+#include "stm32f1xx_ll_cortex.h"
 #include "MyTimer.h"
 #include "Accelero.h"
 #include "Girouette.h"
@@ -13,11 +16,105 @@
 #include "RFEmetteur.h"
 
 
-
 static TIM_TypeDef * Interrupt_Timer=TIM1; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
 
 // déclaration callback appelé toute les 10ms
 void Verif_sail_50ms(void);
+
+int roulis ;
+int uart_on ;
+
+void init_systick(void){
+	
+	ticks_scheduler = 0 ;
+	uart_on = 0 ;
+	LL_Init1msTick(72000000);
+	LL_SYSTICK_EnableIT();
+	
+}
+
+void SysTick_Handler(void)
+{
+	schedule_sys_tasks();
+	ticks_scheduler++ ;
+  if(ticks_scheduler ==100)
+      ticks_scheduler=0;    
+	
+}
+
+
+void verif_girouette(void){
+	//On vérifie d'abord la girouette
+	int angle = gir_get_inc();
+	
+	//On change le servo-moteur
+	if (angle != 0){
+	change_motor(angle);
+	}
+}
+
+
+void verif_roulis(void){
+	roulis = 0 ;
+		//Puis on vérifie le roulis
+	float * result = Verif_roulis_50ms();
+	float x = result[0];
+	float y = result[1] ;
+	
+	if (x > 1.0 && y > 1.00){
+		choquer_voile();
+		roulis = 1;
+	}
+}
+
+
+
+
+void verif_teleco(void){
+		//On regarde la pwm de la télécommande
+	float motor_conf_pwm =  rf_input_get_angle(); // On récupère l'angle
+	
+	if (motor_conf_pwm <0){ // Détection du sens
+		changer_sens_motor(-1);
+		motor_conf_pwm = - motor_conf_pwm; // On prend la valeur absolue si négatif		
+	} else if (motor_conf_pwm > 0){
+				changer_sens_motor(1);
+	}
+	
+	int pulse = choose_motor_pulse(motor_conf_pwm); // 
+
+	pwm_set_duty_cycle(TIM2,2,pulse);
+}
+
+
+
+void send_uart(void){
+	send_all(roulis);
+}
+
+
+
+void schedule_sys_tasks(void){
+	
+	if (ticks_scheduler%30 == 0){
+		verif_girouette();
+	}
+
+	if (ticks_scheduler%40 == 0){
+		verif_roulis();
+
+	}
+	
+	if (ticks_scheduler%50 == 0){
+		verif_teleco();
+	}
+	
+	if (ticks_scheduler%70 == 0){
+		uart_on = 1 ;
+	}
+		
+}
+
 
 
 
@@ -40,8 +137,8 @@ void interrupt_start(void){
 
 void Verif_sail_50ms(void){
 	
-	int roulis = 0 ;
 	//On vérifie d'abord la girouette
+	verif_girouette();
 	int angle = gir_get_inc();
 	
 	//On change le servo-moteur
@@ -49,39 +146,42 @@ void Verif_sail_50ms(void){
 	change_motor(angle);
 	}
 	
-	
-	//Puis on vérifie le roulis
-	float * result = Verif_roulis_50ms();
-	float x = result[0];
-	float y = result[1] ;
-	
-	if (x > 1.0 && y > 1.00){
-		choquer_voile();
-		roulis = 1;
-	}
-	
-	
-	
-	//On regarde la pwm de la télécommande
-	float motor_conf_pwm =  rf_input_get_angle(); // On récupère l'angle
-	
-	if (motor_conf_pwm <0){ // Détection du sens
-		changer_sens_motor(-1);
-		motor_conf_pwm = - motor_conf_pwm; // On prend la valeur absolue si négatif		
-	} else if (motor_conf_pwm > 0){
-				changer_sens_motor(1);
-	}
-	
-	int pulse = choose_motor_pulse(motor_conf_pwm); // 
+	verif_roulis();
 
-	pwm_set_duty_cycle(TIM2,2,pulse);
-	
-	
-	
-	send_all(roulis);
-	
+	verif_teleco();
+
+	send_uart();	
 	
 }
+
+
+
+int get_uart(void){
+	
+	return uart_on ;
+}
+
+
+void reset_uart(void){
+	uart_on = 0 ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,6 @@
-// RIEN A MODIFIER //
+//Ajout des fonctions de la pwm seulement
+//Pierre Calmettes
+//Alexandre Gonzalvez
 
 #ifndef MY_TIMER_H
 #define MY_TIMER_H
@@ -68,17 +70,17 @@ void MyTimer_IT_Enable(TIM_TypeDef * Timer);
 void MyTimer_IT_Disable(TIM_TypeDef * Timer);
 
 /**
-	* @brief  change motor pulsation(duty cycle)
+	* @brief  change pulsation de la PWM (duty cycle)
   * @note   
-	* @param  
+	* @param  LE timer sur lequel est la pwm
   * @retval None
   */
 void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel);
 
 /**
-	* @brief  change motor pulsation(duty cycle)
+	* @brief  Création d'une pwm
   * @note   
-	* @param  
+	* @param  Le timer est le channel sur lequel est la pwm, confug Timer Arr et PSsc, pulse : duty cycle de la pwm
   * @retval
 	*/
 void create_pwm(TIM_TypeDef *TIMER,int channel,int arr,int psc,int pulse);

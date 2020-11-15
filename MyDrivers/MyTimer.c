@@ -161,8 +161,11 @@ void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel){
 		    TIMER->CCR2 = TIMER->ARR*pulse/100;
 
 	}
-	else{
+	else if (channel == 3){
 		    TIMER->CCR3 = TIMER->ARR*pulse/100;
+	}
+	else if (channel == 1){
+				TIMER->CCR1 = TIMER->ARR*pulse/100;
 	}
 }
 
@@ -178,11 +181,21 @@ void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
 			TIMER->CCMR1 |= TIM_CCMR1_OC2PE ;
 			TIMER->CCER |= TIM_CCER_CC2E;
 	}
-	else{
+	else if (channel == 3){
 			TIMER->CCMR2 &= ~TIM_CCMR2_OC3M_0;
 			TIMER->CCMR2 |= TIM_CCMR2_OC3M_1| TIM_CCMR2_OC3M_2;
 			TIMER->CCMR2 |= TIM_CCMR2_OC3PE ;
 			TIMER->CCER |= TIM_CCER_CC3E;
+	}
+	else if (channel == 1){
+			TIMER->CCMR1 &= ~TIM_CCMR1_OC1M_0;
+			TIMER->CCMR1 |= TIM_CCMR1_OC1M_1| TIM_CCMR1_OC1M_2;
+			TIMER->CCMR1 |= TIM_CCMR1_OC1PE ;
+			TIMER->CCER |= TIM_CCER_CC1E;
+		//Si on utilse le ch1 c'est qu'on utilise TIM1 (servo-moteur), CCxNE et MOE à configurer en plus
+			TIMER->CCER &= ~TIM_CCER_CC1NE;
+			TIMER->BDTR |= TIM_BDTR_MOE ;
+
 	}
 
 	pwm_set_duty_cycle(TIMER,pulse,channel); // Réglage de l’impulsion

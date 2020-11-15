@@ -38,8 +38,10 @@ void rf_input_init(void) {
 
 	
 	//config pwm input
-	//Le TIM4 est également utilisé par le servo moteur, mais avec la pwm sur un autre channel, pwm de 20 ms avec une résolution de 1/72000, soit 72 pas pour 1 ms
+	//pwm de 20 ms avec une résolution de 1/72000, soit 72 pas pour 1 ms
 	//Donc 36 pas max pour la vitesse ce qui est largement suffisant
+	MyTimer_Conf(TIM4,1439,999);
+	
 	TIM4->CCMR1 |= TIM_CCMR1_CC1S_0; // put CC1S(0) to 1
 	TIM4->CCMR1 &= ~(TIM_CCMR1_CC1S_1); // put CC1S(1) to 0
 	

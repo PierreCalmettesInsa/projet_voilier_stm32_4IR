@@ -156,22 +156,22 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer)
 
 
 
-void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel){
+void pwm_set_duty_cycle(TIM_TypeDef *TIMER, float pulse,int channel){
 	if(channel==2){
-		    TIMER->CCR2 = TIMER->ARR*pulse/100;
+		    TIMER->CCR2 = TIMER->ARR*pulse/100.0;
 
 	}
 	else if (channel == 3){
-		    TIMER->CCR3 = TIMER->ARR*pulse/100;
+		    TIMER->CCR3 = TIMER->ARR*pulse/100.0;
 	}
 	else if (channel == 1){
-				TIMER->CCR1 = TIMER->ARR*pulse/100;
+				TIMER->CCR1 = TIMER->ARR*pulse/100.0;
 	}
 }
 
 //PWM sur ch3 de tim4 1439,999
 
-void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,int pulse){
+void create_pwm(TIM_TypeDef *TIMER,int channel,int arr, int psc,float pulse){
 
 	MyTimer_Conf(TIMER,arr,psc);
 

@@ -38,4 +38,4 @@ void changer_sens_motor(int sens);
 	* @Param 	None
   * @retval None
   */
-int choose_motor_pulse(float motor_conf_pwm);
+float choose_motor_pulse(float motor_conf_pwm);

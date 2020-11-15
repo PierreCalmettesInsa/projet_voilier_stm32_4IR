@@ -16,10 +16,10 @@
 #include "RFEmetteur.h"
 
 
-static TIM_TypeDef * Interrupt_Timer=TIM1; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
+//static TIM_TypeDef * Interrupt_Timer=TIM1; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
 
 // déclaration callback appelé toute les 10ms
-void Verif_sail_50ms(void);
+//void Verif_sail_50ms(void);
 
 int roulis ;
 int uart_on ;
@@ -46,11 +46,27 @@ void SysTick_Handler(void)
 void verif_girouette(void){
 	//On vérifie d'abord la girouette
 	int angle = gir_get_inc();
+	int angle_voile = 0 ;
+	int reverse = 0 ;
 	
 	//On change le servo-moteur
-	if (angle != 0){
-	change_motor(angle);
+	if (angle > 180){
+		angle -= 180 ;
+		reverse = 1 ;
 	}
+	
+	if ((angle >= 45) && (angle <= 180))
+	{
+		angle_voile = (angle-45)*(float)(90/(180-45));
+	}
+	
+	if (reverse == 1){
+		angle_voile = 90-angle_voile ;
+	}
+	float pulse = ((float)angle_voile*(1.0/18.0))+5.0;
+	
+		change_motor(pulse);
+
 }
 
 
@@ -81,7 +97,7 @@ void verif_teleco(void){
 				changer_sens_motor(1);
 	}
 	
-	int pulse = choose_motor_pulse(motor_conf_pwm); // 
+	float pulse = choose_motor_pulse(motor_conf_pwm); // 
 
 	pwm_set_duty_cycle(TIM2,2,pulse);
 }
@@ -116,7 +132,7 @@ void schedule_sys_tasks(void){
 }
 
 
-
+/*
 
 void interrupt_start(void){
 		//ajout d'un timer
@@ -154,7 +170,7 @@ void Verif_sail_50ms(void){
 	
 }
 
-
+*/
 
 int get_uart(void){
 	

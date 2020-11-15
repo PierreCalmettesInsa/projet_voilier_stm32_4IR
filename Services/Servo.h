@@ -25,7 +25,7 @@ void servo_init_pwm(void);
 	* @Param 	int pulse : pourcentage  : 10 -> 10% de la pwm (ex : 20 ms * 10/100 -> 2 ms)
   * @retval None
   */
-void change_motor(int pulse);
+void change_motor(float pulse);
 
 
 /**

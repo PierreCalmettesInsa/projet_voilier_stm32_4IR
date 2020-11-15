@@ -75,7 +75,7 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer);
 	* @param  LE timer sur lequel est la pwm
   * @retval None
   */
-void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel);
+void pwm_set_duty_cycle(TIM_TypeDef *TIMER, float pulse,int channel);
 
 /**
 	* @brief  Création d'une pwm
@@ -83,5 +83,5 @@ void pwm_set_duty_cycle(TIM_TypeDef *TIMER, int pulse,int channel);
 	* @param  Le timer est le channel sur lequel est la pwm, confug Timer Arr et PSsc, pulse : duty cycle de la pwm
   * @retval
 	*/
-void create_pwm(TIM_TypeDef *TIMER,int channel,int arr,int psc,int pulse);
+void create_pwm(TIM_TypeDef *TIMER,int channel,int arr,int psc,float pulse);
 #endif

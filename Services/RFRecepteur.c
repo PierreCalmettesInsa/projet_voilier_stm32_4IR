@@ -34,7 +34,7 @@ void rf_input_init(void) {
 	LL_GPIO_InitTypeDef LLGPIO_struct;
 	
 	LLGPIO_struct.Pin = LL_GPIO_PIN_6;
-	gpio_conf_floating(LLGPIO_struct,GPIOB);
+	gpio_conf_input(LLGPIO_struct,GPIOB);
 
 	
 	//config pwm input
@@ -61,12 +61,15 @@ void rf_input_init(void) {
 	// Enable capture
 	TIM4->CCER |= TIM_CCER_CC1E | TIM_CCER_CC2E;
 	
+	MyTimer_Start(TIM4);
+
+	
 	}
 
 
 /* Returns an angle in -ange range ; angle range */
 
-int rf_input_get_angle (void) {
+float rf_input_get_angle (void) {
 
 	int duty;
 	uint32_t period ;
@@ -75,13 +78,15 @@ int rf_input_get_angle (void) {
 
 	
 	//On a choisi le channel 1
-	duty = RFInputTimer->CCR2;
-	period = RFInputTimer->CCR1;
-	frequency = TIM4 ->PSC * period / 72000000 ;
-	float duty_cycle = duty / (72000000 * frequency) ;
-	float period_ms = duty_cycle / frequency * 1000 ;
+	duty = RFInputTimer->CCR2 + 2;
+	period = RFInputTimer->CCR1 + 1;
+	//frequency = TIM4 ->PSC * (float)period / 72000000 ;
+	//float duty_cycle = duty / (72000000 * frequency) ;
+	//float period_ms = duty_cycle / frequency * 1000 ;
+	int total_period_ms = (1.0/72000000.0)*(TIM4->PSC + 1) * (TIM4->ARR + 1)*1000 + 1;
+	float period_ms = (float)duty * total_period_ms / (float)(period) ;
 	//angle entre -1 et 1
-	float angle = period_ms*2 -3;
+	float angle = period_ms*2.0 -3.0;
 	
 	//Au cas ou la pwm input ne fonctionne pas
 	if (angle == -3){

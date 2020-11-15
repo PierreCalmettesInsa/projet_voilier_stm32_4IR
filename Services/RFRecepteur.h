@@ -13,7 +13,7 @@ void rf_input_start(TIM_TypeDef *_RFInputTimer);
 void rf_input_init(void);
 
 /* Returns an angle in [ - RF_INPUT_ANGLE_RANGE ; RF_INPUT_ANGLE_RANGE] */
-int rf_input_get_angle(void);
+float rf_input_get_angle(void);
 
 
 

@@ -65,7 +65,7 @@ void verif_girouette(void){
 	}
 	float pulse = ((float)angle_voile*(1.0/18.0))+5.0;
 	
-		change_motor(pulse);
+	change_motor(pulse);
 
 }
 
@@ -99,7 +99,7 @@ void verif_teleco(void){
 	
 	float pulse = choose_motor_pulse(motor_conf_pwm); // 
 
-	pwm_set_duty_cycle(TIM2,2,pulse);
+	pwm_set_duty_cycle(TIM2,pulse,2);
 }
 
 

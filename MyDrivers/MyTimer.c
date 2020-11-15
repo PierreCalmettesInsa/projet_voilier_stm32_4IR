@@ -158,14 +158,14 @@ void MyTimer_IT_Disable(TIM_TypeDef * Timer)
 
 void pwm_set_duty_cycle(TIM_TypeDef *TIMER, float pulse,int channel){
 	if(channel==2){
-		    TIMER->CCR2 = TIMER->ARR*pulse/100.0;
+		    TIMER->CCR2 = TIMER->ARR*(float)pulse/100.0;
 
 	}
 	else if (channel == 3){
-		    TIMER->CCR3 = TIMER->ARR*pulse/100.0;
+		    TIMER->CCR3 = TIMER->ARR*(float)pulse/100.0;
 	}
 	else if (channel == 1){
-				TIMER->CCR1 = TIMER->ARR*pulse/100.0;
+				TIMER->CCR1 = TIMER->ARR*(float)pulse/100.0;
 	}
 }
 

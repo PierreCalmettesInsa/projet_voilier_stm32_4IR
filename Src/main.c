@@ -52,7 +52,7 @@ int main(void)
 	init_systick();
 	
 	
-	//Girouette_Conf();
+	Girouette_Conf();
 	
 	servo_pin_conf_io();
 	servo_init_pwm();

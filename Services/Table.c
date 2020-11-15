@@ -53,7 +53,7 @@ float choose_motor_pulse(float motor_conf_pwm){
 	float pas_length = (1 - NEUTRAL_ZONE_PWM_MCC)/NB_PAS_MCC;
 	for(int pas = 0; pas<NB_PAS_MCC+1;pas++){ // NB_PAS_MCC pas différent linéairement réparti de 0 à 100
 			if(motor_conf_pwm<=NEUTRAL_ZONE_PWM_MCC+pas_length*pas){
-				pulse = (float)pas * 10.0 * pas_length;
+				pulse = (float)pas * 100.0 * pas_length;
 				break;
 			}
 	}

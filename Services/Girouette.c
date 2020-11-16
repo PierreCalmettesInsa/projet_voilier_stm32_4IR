@@ -32,7 +32,7 @@ void Girouette_Conf_io(void){
 	pin7.Pin=LL_GPIO_PIN_7;
 	gpio_conf_input(pin7,GPIOA);
 
-	
+	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
 	
 	LL_GPIO_AF_EnableRemap_TIM3();
 	
@@ -58,6 +58,7 @@ void Girouette_Conf_io(void){
 //handler pour la ligne 5 
 void EXTI9_5_IRQHandler(void){
 	EXTI->PR|=EXTI_PR_PR5_Msk;
+	LL_TIM_DisableCounter(TIM3);
 	LL_TIM_SetCounter(TIM3, 0);
 	LL_TIM_EnableCounter(TIM3);
 }
@@ -97,7 +98,11 @@ void Girouette_Conf(void){
 
 int gir_get_inc(void)
 {	
-	return LL_TIM_GetCounter(TIM3);
+ uint32_t gir_count = LL_TIM_GetCounter(TIM3);
+	if (gir_count > 10000){
+		gir_count =  65536 - gir_count ;
+	}
+	return (gir_count*360)/1532;
 }
 
 

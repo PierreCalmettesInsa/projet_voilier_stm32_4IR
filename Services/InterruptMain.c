@@ -47,23 +47,20 @@ void verif_girouette(void){
 	//On vérifie d'abord la girouette
 	int angle = gir_get_inc();
 	int angle_voile = 0 ;
-	int reverse = 0 ;
 	
 	//On change le servo-moteur
 	if (angle > 180){
 		angle -= 180 ;
-		reverse = 1 ;
 	}
 	
 	if ((angle >= 45) && (angle <= 180))
 	{
-		angle_voile = (angle-45)*(float)(90/(180-45));
+		angle_voile = ((float)angle-45.0)*(90.0/(180.0-45.0));
 	}
 	
-	if (reverse == 1){
-		angle_voile = 90-angle_voile ;
-	}
-	float pulse = ((float)angle_voile*(1.0/18.0))+5.0;
+
+	float pulse = ((float)angle_voile*((9.7-5.4)/90.0))+5.4;
+	
 	
 	change_motor(pulse);
 
@@ -77,7 +74,7 @@ void verif_roulis(void){
 	float x = result[0];
 	float y = result[1] ;
 	
-	if (x > 1.0 && y > 1.00){
+	if ((x < -0.67 && y < 1.0) || (x<-0.10 && y<0.049)){
 		choquer_voile();
 		roulis = 1;
 	}

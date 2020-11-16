@@ -160,7 +160,7 @@ float volt_to_g(uint16_t v){
 	value = value * ADC_CONVERTION ;
 	value = value - ZERO_G ;
 	
-	value = value / SENSITIVITY ;
+	//value = value / SENSITIVITY ;
 	
 	return value ;
 	

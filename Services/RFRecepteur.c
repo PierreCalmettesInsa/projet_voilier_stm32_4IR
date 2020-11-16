@@ -40,7 +40,7 @@ void rf_input_init(void) {
 	//config pwm input
 	//pwm de 20 ms avec une résolution de 1/72000, soit 72 pas pour 1 ms
 	//Donc 36 pas max pour la vitesse ce qui est largement suffisant
-	MyTimer_Conf(TIM4,1439,999);
+	MyTimer_Conf(TIM4,5000,999);
 	
 	TIM4->CCMR1 |= TIM_CCMR1_CC1S_0; // put CC1S(0) to 1
 	TIM4->CCMR1 &= ~(TIM_CCMR1_CC1S_1); // put CC1S(1) to 0
@@ -78,14 +78,16 @@ float rf_input_get_angle (void) {
 
 	
 	//On a choisi le channel 1
-	duty = RFInputTimer->CCR2 + 2;
-	period = RFInputTimer->CCR1 + 1;
+	duty = RFInputTimer->CCR2;
+	period = RFInputTimer->CCR1;
 	//frequency = TIM4 ->PSC * (float)period / 72000000 ;
 	//float duty_cycle = duty / (72000000 * frequency) ;
 	//float period_ms = duty_cycle / frequency * 1000 ;
-	int total_period_ms = (1.0/72000000.0)*(TIM4->PSC + 1) * (TIM4->ARR + 1)*1000 + 1;
-	float period_ms = (float)duty * total_period_ms / (float)(period) ;
+	//int total_period_ms = (1.0/72000000.0)*(TIM4->PSC) * (TIM4->ARR)*1000 + 1;
+	//float period_ms = (float)duty * total_period_ms / (float)(period) ;
 	//angle entre -1 et 1
+
+	float period_ms = ((float)duty-18.0)/60.0;
 	float angle = period_ms*2.0 -3.0;
 	
 	//Au cas ou la pwm input ne fonctionne pas

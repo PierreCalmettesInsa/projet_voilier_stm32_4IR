@@ -99,6 +99,7 @@ void Girouette_Conf(void){
 int gir_get_inc(void)
 {	
  uint32_t gir_count = LL_TIM_GetCounter(TIM3);
+	//Test en réel : La girouette compte de 0 à 1532 dans un sens et de 65536 à 64240 dans l'autre 
 	if (gir_count > 10000){
 		gir_count =  65536 - gir_count ;
 	}

@@ -76,16 +76,18 @@ float rf_input_get_angle (void) {
 	float frequency ;
 
 
+	//duty = RFInputTimer->CCR2 + 2;
+	//period = RFInputTimer->CCR1 + 1;
+	//int total_period_ms = (1.0/72000000.0)*(TIM4->PSC + 1) * (TIM4->ARR + 1)*1000 + 1;
+	//float period_ms = (float)duty * total_period_ms / (float)(period) ;
+	//angle entre -1 et 1
+	//float angle = period_ms*2.0 -3.0;
+
+	//En réel sur le voilier les calculs ci-dessus ne fonctionnaient pas, nous avons plutôt fait en relevant les bornes (78-138) puis fonction affine
 	
 	//On a choisi le channel 1
 	duty = RFInputTimer->CCR2;
 	period = RFInputTimer->CCR1;
-	//frequency = TIM4 ->PSC * (float)period / 72000000 ;
-	//float duty_cycle = duty / (72000000 * frequency) ;
-	//float period_ms = duty_cycle / frequency * 1000 ;
-	//int total_period_ms = (1.0/72000000.0)*(TIM4->PSC) * (TIM4->ARR)*1000 + 1;
-	//float period_ms = (float)duty * total_period_ms / (float)(period) ;
-	//angle entre -1 et 1
 
 	float period_ms = ((float)duty-18.0)/60.0;
 	float angle = period_ms*2.0 -3.0;

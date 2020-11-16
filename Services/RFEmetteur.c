@@ -24,8 +24,6 @@ void send_all(int roulis){
 	
 	GPIOA->ODR |= GPIO_ODR_ODR11 ;
 	
-	
-	
 	//get tension batterie
 	float batterie = get_batterie_volt();
 	
@@ -39,13 +37,13 @@ void send_all(int roulis){
 		send(59,USART1);
 	}
 	
-	
 	if (roulis == 1){
 		
 		send(49,USART1);
 		send(13,USART1);
 	}
 	
+	//Rajouter pourcentage des voiles + date
 	
 	
 	

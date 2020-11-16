@@ -16,6 +16,7 @@
 #include "RFEmetteur.h"
 
 
+//A la place d'utiliser la systick on peut utiliser un timer, sauf qu'ils sont tous déjà utilisés
 //static TIM_TypeDef * Interrupt_Timer=TIM1; // init par défaut au cas où l'utilisateur ne lance pas interrupt_start avant toute autre fct.
 
 // déclaration callback appelé toute les 10ms
@@ -74,6 +75,7 @@ void verif_roulis(void){
 	float x = result[0];
 	float y = result[1] ;
 	
+	//Valeurs déterminées en testant en réel
 	if ((x < -0.67 && y < 1.0) || (x<-0.10 && y<0.049)){
 		choquer_voile();
 		roulis = 1;
